@@ -1,1 +1,2 @@
 Bu proje, kullanıcıların verileri kolayca yükleyip analiz edebileceği interaktif bir web uygulamasıdır. Streamlit framework’ü kullanılarak geliştirilen bu uygulama, veri bilimi ve analiz süreçlerini hızlandırmak amacıyla tasarlanmıştır.
+Bu proje, makine öğrenmesi alanında nihai sonuçlar üretmek yerine, kullanıcılara veri analizi sürecinde rehberlik eden, yenilikçi ve etkileşimli bir öneri sistemi sunuyor.
