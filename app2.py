@@ -124,8 +124,16 @@ if sayfa == "Keşifsel Veri Analizi":
                         veri[col] = veri[col].fillna(veri[col].mode()[0])
                     st.write("Eksik kategorik değerler mod ile dolduruldu.")
             st.markdown("---")
-
-        # Genel veri bilgileri
+                        # ... (Veri temizleme ve diğer işlemler tamamlandıktan sonra)
+            st.subheader("Temizlenmiş Veri Seti İndir")
+# Veri hazır olduktan sonra CSV'ye dönüştürüp indirilebilir hale getiriyoruz.
+            csv_veri = veri.to_csv(index=False).encode('utf-8')
+            st.download_button(
+            label="Temizlenmiş Veriyi İndir",
+            data=csv_veri,
+            file_name="temizlenmis_veri.csv",
+            mime="text/csv")
+        #Genel veri bilgileri
         if st.checkbox("Veri Hakkında Genel Bilgileri Göster"):
             bilgi_buffer = io.StringIO()
             with redirect_stdout(bilgi_buffer):
@@ -171,7 +179,7 @@ if sayfa == "Keşifsel Veri Analizi":
                 else:
                     st.write("Yorum: Veri normal dağılıma uymamaktadır (H0 reddedilir).")
 
-        # Kategorik değişken grafikleri
+        #kategorik değişken grafikleri
         if st.checkbox("Kategorik Değişkenler için Grafikler"):
             kategorik_sutunlar = veri.select_dtypes(include='object').columns
             secilen_kategorik = st.selectbox("İncelemek istediğiniz kategorik değişkeni seçiniz.", kategorik_sutunlar)
@@ -184,7 +192,7 @@ if sayfa == "Keşifsel Veri Analizi":
                              title=f"{secilen_kategorik} - Pie Chart")
             st.plotly_chart(fig)
 
-        # Sayısal değişken grafikleri
+        #sayısal değişken grafikleri çizdirelim
         if st.checkbox("Sayısal Değişkenler için Grafikler"):
             sayisal_sutunlar = veri.select_dtypes(include=['float64', 'int64']).columns
             secilen_sayisal = st.selectbox("İncelemek istediğiniz sayısal değişkeni seçiniz.", sayisal_sutunlar)
@@ -302,7 +310,7 @@ elif sayfa == "T Testi":
         st.write("Veri Örneği:")
         st.write(veri)
 
-        # Tek Örneklem T Testi
+        # Tek örneklem için T Testi
         st.subheader("Tek Örneklem T Testi")
         sayisal_sutunlar = veri.select_dtypes(include=['float64', 'int64']).columns
         if len(sayisal_sutunlar) > 0:
@@ -319,7 +327,7 @@ elif sayfa == "T Testi":
         else:
             st.write("Sayısal değişken bulunamadı.")
 
-        # İki Örneklem Bağımsız T Testi
+        #iki örneklem için bağımsız T test:
         st.subheader("İki Örneklem Bağımsız T Testi")
         sayisal_sutunlar = veri.select_dtypes(include=['float64', 'int64']).columns
         grup_sutunlar = veri.select_dtypes(include='object').columns
@@ -354,7 +362,7 @@ elif sayfa == "T Testi":
         else:
             st.write("Bağımsız T Testi için uygun grup veya sayısal değişken bulunamadı.")
 
-        # İki Örneklem Bağımlı T Testi
+        # iki örneklem bağımlı T testi
         st.subheader("İki Örneklem Bağımlı T Testi")
         sayisal_sutunlar = veri.select_dtypes(include=['float64', 'int64']).columns
         if len(sayisal_sutunlar) >= 2:
@@ -391,7 +399,7 @@ elif sayfa == "ANOVA & Ki-Kare Testleri":
         test_turu = st.radio("Test Türünü Seçin:", 
                              ["Tek Yönlü ANOVA", "Çift Yönlü ANOVA", "Ki-Kare Testi"])
 
-        # Tek Yönlü ANOVA
+        #tek yönlü ANOVA
         if test_turu == "Tek Yönlü ANOVA":
             st.subheader("Tek Yönlü ANOVA")
             sayisal_sutunlar = veri.select_dtypes(include=["float64", "int64"]).columns
@@ -415,7 +423,7 @@ elif sayfa == "ANOVA & Ki-Kare Testleri":
             else:
                 st.write("Tek yönlü ANOVA için uygun sayısal veya kategorik değişken bulunamadı.")
 
-        # Çift Yönlü ANOVA
+        #çift yönlü ANOVA
         elif test_turu == "Çift Yönlü ANOVA":
             st.subheader("Çift Yönlü ANOVA")
             sayisal_sutunlar = veri.select_dtypes(include=['float64', 'int64']).columns
@@ -436,7 +444,7 @@ elif sayfa == "ANOVA & Ki-Kare Testleri":
             else:
                 st.write("Çift yönlü ANOVA için yeterli sayıda kategorik değişken veya sayısal bağımlı değişken bulunamadı.")
 
-        # Ki-Kare Testi
+        # Ki-Kare testi
         elif test_turu == "Ki-Kare Testi":
             st.subheader("Ki-Kare Testi")
             grup_sutunlar = veri.select_dtypes(include='object').columns
@@ -464,7 +472,7 @@ elif sayfa == "ML Öneri Sistemi":
     st.title("ML Öneri Sistemi")
     st.write("Bu bölümde, veri setinizin özelliklerine göre makine öğrenmesi yaklaşımı ve metrik önerileri sunulacaktır.")
     
-    # Dosya türlerini tanımla ve veri seti yükle
+
     dosya_turu = ["csv", "txt", "xls", "xlsx"]
     yuklenen_veri = st.file_uploader("Veri setinizi yükleyiniz.", type=dosya_turu)
     
